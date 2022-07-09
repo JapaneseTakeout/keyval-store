@@ -35,6 +35,20 @@ module.exports = express()
       .catch(next);
   })
 
+  .get("/storage/all", (req, res, next) => {
+    const { lastID, pageSize, isExpired } = req.query;
+    return getAll(lastId, pageSize, isExpired)
+      .then((result) => res.json(result))
+      .catch(next);
+  })
+
+  .put("/storage", (req, res, next) => {
+    const { key, expiryDate } = req.query;
+    // isExpired can only be 0 or 1, 0 ---> Not expired, 1 ---> Expired
+    return update(key, expiryDate)
+      .then((result) => res.json(result))
+      .catch(next);
+  })
   // Delete Section
   .delete("/storage", (req, res, next) => {
     //Checking Expiration Date
