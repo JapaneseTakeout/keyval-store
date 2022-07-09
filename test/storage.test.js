@@ -66,3 +66,15 @@ it("Should return 3 result", async () => {
   const all = await getAll(0, 20, 0);
   expect(all.length).toBe(3);
 });
+
+it("Should expire 1 after inserting 3", async () => {
+  const datas = [1, 2, 3];
+  await query(`DELETE FROM ${TABLE_NAME}`);
+  const keys = await Promise.all(datas.map((data) => add(data)));
+  const all = await getAll(0, 20, 0);
+  expect(all.length).toBe(3);
+
+  await update(keys[0], 0);
+  const allAfterUpdate = await getAll(0, 20, 0);
+  expect(allAfterUpdate.length).toBe(2);
+});
